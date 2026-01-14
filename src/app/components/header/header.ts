@@ -2,8 +2,6 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
-import { ToastMessagesComponent } from '../toast-messages/toast-messages';
-import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog';
 import { PotionService } from '../../services/potion';
 
 @Component({
@@ -11,9 +9,7 @@ import { PotionService } from '../../services/potion';
   imports: [
     CommonModule,
     RouterLink,
-    RouterLinkActive,
-    ToastMessagesComponent,
-    ConfirmationDialogComponent
+    RouterLinkActive
   ],
   templateUrl: './header.html',
   styles: [],

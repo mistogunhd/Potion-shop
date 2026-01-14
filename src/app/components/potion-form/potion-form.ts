@@ -7,13 +7,18 @@ import { PotionService } from '../../services/potion';
 import { MessageService } from '../../services/message';
 import { CustomValidators } from '../../shared/validators';
 import { IngredientsEditorComponent } from '../ingredients-editor/ingredients-editor';
-import {takeUntil} from 'rxjs/operators';
-import {DeliveryMethod, PaymentMethod} from '../../models/potion.model';
+import { takeUntil } from 'rxjs/operators';
+import { DeliveryMethod, PaymentMethod } from '../../models/potion.model';
+
 
 @Component({
   selector: 'app-potion-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IngredientsEditorComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    IngredientsEditorComponent,
+  ],
   templateUrl: 'potion-form.html',
   styles: [`
     .potion-form {
