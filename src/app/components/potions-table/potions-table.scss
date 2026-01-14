@@ -1,0 +1,59 @@
+
+
+.potions-table {
+  @apply bg-white p-6 rounded-xl shadow-sm border border-gray-200;
+}
+
+.delivery-badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.delivery-badge-owl {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.delivery-badge-dragon {
+  @apply bg-red-100 text-red-800;
+}
+
+.delivery-badge-portal {
+  @apply bg-green-100 text-green-800;
+}
+
+.delivery-badge-broom {
+  @apply bg-purple-100 text-purple-800;
+}
+
+.page-button {
+  @apply px-3 py-1.5 border-t border-b border-gray-300
+  text-gray-700 hover:bg-gray-50 transition-colors;
+}
+
+.page-button-active {
+  @apply bg-blue-50 text-blue-600 border-blue-300;
+}
+
+.date-normal {
+  @apply text-gray-900;
+}
+
+.date-warning {
+  @apply text-yellow-600;
+}
+
+.date-danger {
+  @apply text-red-600;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}

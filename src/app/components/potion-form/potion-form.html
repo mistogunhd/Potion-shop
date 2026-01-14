@@ -1,0 +1,161 @@
+<div class="potion-form">
+  <form [formGroup]="potionForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+    <div class="border-b border-gray-200 pb-4">
+      <h2 class="text-2xl font-bold text-gray-900">Создание нового зелья</h2>
+      <p class="text-gray-600 mt-1">Заполните все поля для создания волшебного зелья</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Номер зелья *
+        </label>
+        <input type="text"
+               formControlName="potionNumber"
+               class="custom-input"
+               placeholder="Например: POT-2401-001">
+        @if (potionForm.get('potionNumber')?.invalid && potionForm.get('potionNumber')?.touched) {
+          <div class="mt-1 text-sm text-red-600">
+            Введите номер зелья
+          </div>
+        }
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Клиент *
+        </label>
+        <input type="text"
+               formControlName="customer"
+               class="custom-input"
+               placeholder="Имя клиента">
+        @if (potionForm.get('customer')?.invalid && potionForm.get('customer')?.touched) {
+          <div class="mt-1 text-sm text-red-600">
+            Введите имя клиента (минимум 2 символа)
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Дата заказа *
+        </label>
+        <input type="date"
+               formControlName="orderDate"
+               [min]="minDate | date:'yyyy-MM-dd'"
+               [max]="maxDate | date:'yyyy-MM-dd'"
+               class="custom-input">
+        @if (potionForm.get('orderDate')?.invalid && potionForm.get('orderDate')?.touched) {
+          <div class="mt-1 text-sm text-red-600">
+            Выберите корректную дату заказа
+          </div>
+        }
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Дата готовности *
+        </label>
+        <input type="date"
+               formControlName="readyDate"
+               [min]="tomorrow | date:'yyyy-MM-dd'"
+               [max]="maxReadyDate | date:'yyyy-MM-dd'"
+               class="custom-input">
+        @if (potionForm.get('readyDate')?.invalid && potionForm.get('readyDate')?.touched) {
+          <div class="mt-1 text-sm text-red-600">
+            Дата готовности должна быть после даты заказа
+          </div>
+        }
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">
+        Адрес доставки *
+      </label>
+      <textarea formControlName="deliveryAddress"
+                rows="3"
+                class="custom-input resize-none"
+                placeholder="Укажите полный адрес доставки"></textarea>
+      @if (potionForm.get('deliveryAddress')?.invalid && potionForm.get('deliveryAddress')?.touched) {
+        <div class="mt-1 text-sm text-red-600">
+          Введите адрес доставки (минимум 5 символов)
+        </div>
+      }
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Способ доставки *
+        </label>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button"
+                  *ngFor="let method of deliveryMethods"
+                  [class]="deliveryMethodClasses()[method]"
+                  (click)="selectDeliveryMethod(method)">
+            {{ method }}
+          </button>
+        </div>
+        @if (potionForm.get('deliveryMethod')?.invalid && potionForm.get('deliveryMethod')?.touched) {
+          <div class="mt-1 text-sm text-red-600">
+            Выберите способ доставки
+          </div>
+        }
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Способ оплаты *
+        </label>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button"
+                  *ngFor="let method of paymentMethods"
+                  [class]="paymentMethodClasses()[method]"
+                  (click)="selectPaymentMethod(method)">
+            {{ method }}
+          </button>
+        </div>
+        @if (potionForm.get('paymentMethod')?.invalid && potionForm.get('paymentMethod')?.touched) {
+          <div class="mt-1 text-sm text-red-600">
+            Выберите способ оплаты
+          </div>
+        }
+      </div>
+    </div>
+
+    <div>
+      <app-ingredients-editor
+        formControlName="ingredients"
+        [availableIngredients]="availableIngredients">
+      </app-ingredients-editor>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t border-gray-200">
+      <button type="submit"
+              [disabled]="potionForm.invalid || isSubmitting()"
+              class="custom-btn-primary flex-1">
+        <i class="pi" [class]="isSubmitting() ? 'pi-spin pi-spinner' : 'pi-check'"></i>
+        {{ isSubmitting() ? 'Создание...' : 'Создать зелье' }}
+      </button>
+
+      <button type="button"
+              (click)="resetForm()"
+              class="custom-btn-secondary flex-1">
+        <i class="pi pi-refresh mr-2"></i>
+        Очистить форму
+      </button>
+    </div>
+
+    <div *ngIf="potionForm.valid"
+         class="p-4 bg-green-50 border border-green-200 rounded-lg">
+      <h4 class="font-medium text-green-800 mb-2">
+        <i class="pi pi-check-circle mr-2"></i>
+        Готово к созданию
+      </h4>
+    </div>
+  </form>
+</div>

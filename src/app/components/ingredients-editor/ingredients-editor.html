@@ -1,0 +1,151 @@
+<div class="space-y-4" [formGroup]="ingredientsForm">
+  <div class="flex items-center justify-between">
+    <h4 class="text-lg font-medium text-gray-900">Ингредиенты зелья</h4>
+    <span class="text-sm text-gray-500">
+      Минимум 3 ингредиента
+    </span>
+  </div>
+
+  <div formArrayName="ingredients" class="space-y-3">
+    @for (ingredient of ingredients.controls; track i; let i = $index) {
+      <div [formGroupName]="i"
+           class="p-4 border border-gray-200 rounded-lg hover:border-primary-300 transition-colors">
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+          <div class="md:col-span-5">
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Ингредиент
+            </label>
+            <select formControlName="id"
+                    (change)="onIngredientChange(i, $event)"
+                    class="custom-input">
+              <option value="">Выберите ингредиент...</option>
+              @for (ingredientOption of availableIngredients(); track ingredientOption.id) {
+                <option [value]="ingredientOption.id"
+                        [disabled]="usedIngredientIds().includes(ingredientOption.id)">
+                  {{ ingredientOption.name }} - {{ ingredientOption.pricePerUnit | currency }} / {{ ingredientOption.unit }}
+                </option>
+              }
+            </select>
+            @if (ingredient.get('id')?.invalid && ingredient.get('id')?.touched) {
+              <div class="mt-1 text-sm text-red-600">
+                Выберите ингредиент
+              </div>
+            }
+          </div>
+
+          <div class="md:col-span-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Количество
+            </label>
+            <div class="relative">
+              <input type="number"
+                     formControlName="quantity"
+                     min="0.1"
+                     step="0.1"
+                     class="custom-input pr-10">
+              @if (ingredient.get('id')?.value) {
+                <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                  {{ ingredientMap().get(ingredient.get('id')?.value)?.unit || 'шт' }}
+                </span>
+              }
+            </div>
+            @if (ingredient.get('quantity')?.invalid && ingredient.get('quantity')?.touched) {
+              <div class="mt-1 text-sm text-red-600">
+                Минимальное количество: 0.1
+              </div>
+            }
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Цена за ед.
+            </label>
+            <input type="number"
+                   formControlName="unitPrice"
+                   readonly
+                   class="custom-input bg-gray-50">
+          </div>
+
+          <div class="md:col-span-2 flex items-end gap-2">
+            <div class="flex-1">
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Итого
+              </label>
+              <div class="p-2 bg-gray-50 rounded border border-gray-200">
+                <span class="font-bold text-primary-600">
+                  {{ ingredient.get('totalPrice')?.value | currency }}
+                </span>
+              </div>
+            </div>
+
+            @if (validationMessages().canRemove) {
+              <button type="button"
+                      (click)="removeIngredient(i)"
+                      class="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Удалить ингредиент">
+                <i class="pi pi-trash"></i>
+              </button>
+            }
+          </div>
+        </div>
+
+        @if (ingredient.get('id')?.value) {
+          @if (ingredientDescriptions().get(ingredient.get('id')?.value)) {
+            <div class="mt-2 text-sm text-gray-600 italic">
+              {{ ingredientDescriptions().get(ingredient.get('id')?.value) }}
+            </div>
+          }
+        }
+      </div>
+    } @empty {
+      <div class="p-4 text-center text-gray-500 border border-dashed border-gray-300 rounded-lg">
+        Нет добавленных ингредиентов
+      </div>
+    }
+  </div>
+
+  <button type="button"
+          (click)="addIngredient()"
+          class="w-full p-3 border-2 border-dashed border-gray-300 rounded-lg
+                 hover:border-primary-400 hover:bg-primary-50
+                 text-primary-600 font-medium transition-colors
+                 flex items-center justify-center gap-2">
+    <i class="pi pi-plus"></i>
+    Добавить ингредиент
+  </button>
+
+  <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm text-gray-600">Ингредиентов: {{ ingredients.controls.length }}</p>
+        <p class="text-sm text-gray-600">Стоимость ингредиентов:</p>
+      </div>
+      <div class="text-right">
+        <p class="text-2xl font-bold text-primary-600">
+          {{ totalCost() | currency }}
+        </p>
+        @if (!validationMessages().isValid) {
+          <p class="text-sm text-gray-600">
+            <span class="text-red-600">{{ validationMessages().message }}</span>
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (ingredientsForm.get('ingredients')?.invalid && ingredientsForm.get('ingredients')?.touched) {
+    <div class="p-3 bg-red-50 border border-red-200 rounded-lg">
+      <p class="text-red-600 font-medium">
+        <i class="pi pi-exclamation-triangle mr-2"></i>
+        Ошибки в ингредиентах:
+      </p>
+      <ul class="mt-2 space-y-1">
+        <li class="text-sm text-red-600">
+          Необходимо минимум 3 ингредиента
+        </li>
+      </ul>
+    </div>
+  }
+</div>
+
