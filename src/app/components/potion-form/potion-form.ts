@@ -8,7 +8,7 @@ import { MessageService } from '../../services/message';
 import { CustomValidators } from '../../shared/validators';
 import { IngredientsEditorComponent } from '../ingredients-editor/ingredients-editor';
 import { takeUntil } from 'rxjs/operators';
-import { DeliveryMethod, PaymentMethod } from '../../models/potion.model';
+import {AvailableIngredient, DeliveryMethod, PaymentMethod} from '../../models/potion.model';
 
 
 @Component({
@@ -60,11 +60,11 @@ export class PotionFormComponent implements OnInit {
   private destroy$ = new Subject<void>()
 
   potionForm!: FormGroup;
-  isSubmitting = signal(false);
+  isSubmitting = signal<boolean>(false);
 
-  deliveryMethods = this.potionService.deliveryMethods;
-  paymentMethods = this.potionService.paymentMethods;
-  availableIngredients = this.potionService.availableIngredients;
+  deliveryMethods: string[] = this.potionService.deliveryMethods;
+  paymentMethods: string[] = this.potionService.paymentMethods;
+  availableIngredients: AvailableIngredient[] = this.potionService.availableIngredients;
 
   selectedDeliveryMethod = signal<string | null>(null);
   selectedPaymentMethod = signal<string | null>(null);

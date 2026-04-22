@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 
 import { PotionsTableComponent } from './components/potions-table/potions-table';
-import {PotionFormComponent} from './components/potion-form/potion-form';
 
 
 export const routes: Routes = [

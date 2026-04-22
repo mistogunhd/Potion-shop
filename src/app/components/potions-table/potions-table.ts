@@ -26,15 +26,15 @@ export class PotionsTableComponent implements OnInit {
   totalOrders = this.potionService.totalOrders;
   totalRevenue = this.potionService.totalRevenue;
 
-  isLoading = signal(false);
-  searchTerm = signal('');
-  statusFilter = signal('all');
-  deliveryFilter = signal('all');
+  isLoading = signal<boolean>(false);
+  searchTerm = signal<string>('');
+  statusFilter = signal<string>('all');
+  deliveryFilter = signal<string>('all');
   selectedOrder = signal<PotionOrder | null>(null);
-  currentPage = signal(1);
+  currentPage = signal<number>(1);
 
-  readonly pageSize = 10;
-  readonly deliveryMethods = this.potionService.deliveryMethods;
+  readonly pageSize: number = 10;
+  readonly deliveryMethods: string[] = this.potionService.deliveryMethods;
 
   filteredOrders = computed(() => {
     let result = this.orders();
